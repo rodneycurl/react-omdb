@@ -13,48 +13,37 @@ class SearchContainer extends Component {
     }
   }
 
-  onSearchInput (evt) {
-    this.setState({
-      query: evt.target.value,
-    })
-  }
+onHandleSearch(e){
+  this.setState({
+    query: e.target.value
+  })
+}
 
-  handleToggleSearch (evt) {
-    let hasSearched = !this.state.hasSearched
-    this.setState(Object.assign(this.state, {hasSearched, }))
-  }
-
-  onSubmitQuery(evt){
-    evt.preventDefault()
-    let component = this
-    queryOmdb(this.state.query).then( data => {
-      component.setState({
-        query: '',
-        hasSearched: !component.state.hasSearched,
-        movies: data,
-      })
+onSubmitQuery(event){
+  event.preventDefault()
+  let component = this
+  queryOmdb(this.state.query).then(data => {
+    component.setState({
+      query: '',
+      hasSearched: true,
+      movies: data
     })
   }
 
   render(){
-    if (this.state.hasSearched){
+    if(this.state.hasSearched){
       return (
-        <div>
-          <button
-            onClick={ evt => this.handleToggleSearch(evt) }
-            style={styles.spaceB}
-            className="btn btn-default">
-              Search Again
-          </button>
-          <Results movies={this.state.movies} />
-        </div>
+        <Results movies={this.state.movies} />
       )
-    } else {
-      return  (
+    }else{
+      return(
+        <div>
         <Search
-          handleSearchInput={ (evt) => this.onSearchInput(evt) }
-          handleSubmitQuery={ (evt) => this.onSubmitQuery(evt) }
-          query={this.state.query} />
+        handleSearch={ (e) => this.onHandleSearch(e) }
+        submitQuery={ (e) => this.onSubmitQuery(e)}
+          query={this.state.query}
+          />
+          </div>
       )
     }
   }
